@@ -24,9 +24,12 @@ adding Swagger/OpenAPI support to the application. */
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
 builder.Services.AddDbContext<StoreContext>(opt=>{
     opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+builder.Services.AddCors();
 
 var app = builder.Build();
 
@@ -36,6 +39,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(opt=>{
+    opt.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
+});
 
 /* `app.UseHttpsRedirection();` is a middleware that redirects HTTP requests to HTTPS. It ensures that
 all incoming requests are redirected to the secure HTTPS protocol. This helps to enforce secure
